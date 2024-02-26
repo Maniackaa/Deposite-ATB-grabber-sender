@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  grabber:
+    container_name: atb_adb_grabber
+    build: .
+    env_file: .env
+    command: python3 atb_adb_grabber.py
+    privileged: true
+    volumes:
+      - ./logs/ftp_grabber:/app/logs
+      - ./atb_screenshots:/app/atb_screenshots
+    environment:
+      - ANDROID_ADB_SERVER_ADDRESS=host.docker.internal
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    ports:
+      - "5037:5037"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+  sender:
+    container_name: atb_screen_sender
+    build: .
+    env_file: .env
+    command: python3 atb_screen_sender.py
+    volumes:
+      - ./logs/atb_screen_sender:/app/logs
+      - ./atb_screenshots:/app/atb_screenshots
+    restart: always
