@@ -53,16 +53,22 @@ def main():
                         logger.debug(f'Отправляем {file.name, size, bool(size>0)}')
                         with open(file, "rb") as binary:
                             screen = {'image': binary}
-                            response = requests.post(OCR_ENDPOINT, data={'name': file.name, 'worker': WORKER}, files=screen, timeout=10)
+                            response = requests.post(OCR_ENDPOINT, data={'name': file.name, 'worker': WORKER, 'oem': '1', 'lang': 'rus'}, files=screen, timeout=10)
                             pay = response.reason
                             logger.debug(f'{response.status_code}')
                             logger.debug(f'pay: {pay}')
                             logger.debug(f'Время распознавания {time.perf_counter() - start}')
-                        if response.status_code in [200]:
+                        if response.status_code in [200, 201]:
                             # Отправляем платеж
+                            print(file.name)
                             serial = phone_serial(file.name)
-
-                            response = requests.post(ATB_ENDPOINT, data={'pay': pay, 'worker': WORKER, 'phone_name': get_phone_name(serial) }, timeout=10)
+                            logger.info(f'Отправляем скрин с телефона {serial}')
+                            print(serial)
+                            response = requests.post(ATB_ENDPOINT, data={'pay': pay,
+                                                                         'worker': WORKER,
+                                                                         'phone_name': get_phone_name(serial),
+                                                                         'type': 'bank1',
+                                                                         }, timeout=10)
                             if response.status_code in [200, 201]:
                                 file.unlink()
                                 logger.debug(f'Скрин удален')
