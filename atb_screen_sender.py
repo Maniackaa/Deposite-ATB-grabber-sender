@@ -72,6 +72,9 @@ def main():
                             if response.status_code in [200, 201]:
                                 file.unlink()
                                 logger.debug(f'Скрин удален')
+                        elif response.status_code in [400]:
+                            file.unlink()
+                            logger.debug(f'Скрин не распознан и удален')
                         elif response.status_code in [502]:
                             time.sleep(5)
                 except NewConnectionError:
