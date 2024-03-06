@@ -53,7 +53,7 @@ def main():
                         logger.debug(f'Отправляем {file.name, size, bool(size>0)}')
                         with open(file, "rb") as binary:
                             screen = {'image': binary}
-                            response = requests.post(OCR_ENDPOINT, data={'name': file.name, 'worker': WORKER, 'oem': '1', 'lang': 'rus'}, files=screen, timeout=10)
+                            response = requests.post(OCR_ENDPOINT, data={'name': file.name, 'worker': WORKER, 'oem': '1', 'psm': '7', 'lang': 'eng'}, files=screen, timeout=10)
                             pay = response.reason
                             logger.debug(f'{response.status_code}')
                             logger.debug(f'pay: {pay}')
