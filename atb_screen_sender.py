@@ -60,10 +60,10 @@ def main():
                             logger.debug(f'Время распознавания {time.perf_counter() - start}')
                         if response.status_code in [200, 201]:
                             # Отправляем платеж
-                            print(file.name)
+                            # print(file.name)
                             serial = phone_serial(file.name)
                             logger.info(f'Отправляем скрин с телефона {serial}')
-                            print(serial)
+                            # print(serial)
                             response = requests.post(ATB_ENDPOINT, data={'pay': pay,
                                                                          'worker': WORKER,
                                                                          'phone_name': get_phone_name(serial),
@@ -79,7 +79,7 @@ def main():
                 except Exception as err:
                     logger.error(f'Ошибка обработки файла {file.name}: {err}')
                     err_log.error(err, exc_info=True)
-                    time.sleep(0.1)
+                    time.sleep(0.5)
 
             logger.debug(f'Общее время: {time.perf_counter() - global_start}')
             logger.debug('----')
