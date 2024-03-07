@@ -13,6 +13,7 @@ services:
     volumes:
       - ./logs/adb_grabber:/app/logs
       - screen_bank1:/app/atb_screenshots
+      - ./atb_screenshots:/app/atb_screenshots
     environment:
       - ANDROID_ADB_SERVER_ADDRESS=host.docker.internal
     stdin_open: true # docker run -i
