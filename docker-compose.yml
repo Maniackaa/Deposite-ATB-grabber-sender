@@ -30,6 +30,5 @@ services:
     command: python3 atb_screen_sender.py
     volumes:
       - ./logs/atb_screen_sender:/app/logs
-      - ./atb_screenshots:/app/atb_screenshots
       - screen_bank1:/app/atb_screenshots
     restart: always
