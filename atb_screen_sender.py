@@ -84,7 +84,7 @@ def main():
                     err_log.error(err, exc_info=True)
                     time.sleep(0.1)
 
-            logger.info(f'Все файлы обработаны. Общее время: {time.perf_counter() - global_start}\n')
+            logger.info(f'Все файлы обработаны. Общее время: {time.perf_counter() - global_start}\n\n')
             time.sleep(1)
 
         except Exception as err:

@@ -70,9 +70,6 @@ def main():
                 except Exception as err:
                     logger.error(err, exc_info=False)
                     time.sleep(5)
-            else:
-                logger.info('Устройств из списка нет')
-                time.sleep(10)
         time.sleep(0.5)
 
 
