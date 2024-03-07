@@ -40,7 +40,7 @@ def main():
             global_start = time.perf_counter()
             files = list(path.glob('*.jpg'))
             if files:
-                logger.info(f'Обнаружены файлы для распознавания:\n{files}')
+                logger.info(f'Обнаружены файлов для распознавания:\n{len(files)}')
             for file in files:
                 try:
                     start = time.perf_counter()
@@ -57,7 +57,7 @@ def main():
                             response = requests.post(OCR_ENDPOINT, data={'name': file.name, 'worker': WORKER, 'oem': '1', 'psm': '7', 'lang': 'eng'}, files=screen, timeout=10)
                             pay = response.reason
                             logger.debug(f'{response.status_code} ({time.perf_counter() - start})')
-                            logger.info(f'Распознан pay: {pay} за {time.perf_counter() - start}')
+                            logger.info(f'Результа со скрина: {pay} ({time.perf_counter() - start})')
                         if response.status_code in [200, 201]:
                             # Отправляем платеж
                             # print(file.name)
@@ -71,16 +71,18 @@ def main():
                                                                          }, timeout=10)
                             if response.status_code in [200, 201]:
                                 file.unlink()
-                                logger.debug(f'Платеж отправлен, Скрин удален')
+                                logger.info(f'Результат отправлен, Скрин удален')
                         elif response.status_code in [400]:
                             file.unlink()
                             logger.debug(f'Скрин не распознан и удален')
                         elif response.status_code in [502]:
+                            logger.info('Ошибка на сервере')
                             time.sleep(5)
                 except NewConnectionError:
+                    logger.info('Ошибка соединения')
                     time.sleep(5)
                 except Exception as err:
-                    logger.error(f'Ошибка обработки файла {file.name}: {err}')
+                    logger.info(f'Ошибка обработки файла {file.name}: {err}')
                     err_log.error(err, exc_info=True)
                     time.sleep(0.1)
 
