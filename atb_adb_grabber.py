@@ -36,40 +36,44 @@ def get_file_list(directory, adb_device):
 def main():
 
     while True:
-        # adb_client = AdbClient(host="host.docker.internal", port=5037)
-        # adb_client = AdbClient(host="127.0.0.1", port=5037)
-        adb_client = AdbClient(host=os.getenv('HOST'), port=5037)
-        adb_devices = adb_client.device_list()
-        PHONES = conf.adb.ATB_PHONES
-        ATB_NAMES = conf.adb.ATB_NAMES
-        # logger.info(f'Подключены устройства: {adb_devices}')
-        for adb_device in adb_devices:
-            device_name = adb_device.info.get('serialno')
-            # logger.info(f'Подключено: {device_name}')
-            if device_name in PHONES:
-                for num, phone in enumerate(PHONES):
-                    phone_name = ATB_NAMES[num]
+        try:
+            # adb_client = AdbClient(host="host.docker.internal", port=5037)
+            # adb_client = AdbClient(host="127.0.0.1", port=5037)
+            adb_client = AdbClient(host=os.getenv('HOST'), port=5037)
+            adb_devices = adb_client.device_list()
+            PHONES = conf.adb.ATB_PHONES
+            ATB_NAMES = conf.adb.ATB_NAMES
+            # logger.info(f'Подключены устройства: {adb_devices}')
+            for adb_device in adb_devices:
+                device_name = adb_device.info.get('serialno')
+                # logger.info(f'Подключено: {device_name}')
+                if device_name in PHONES:
+                    phone_num = PHONES.index(device_name)
+                    phone_name = ATB_NAMES[phone_num]
                     logger.info(f'Обнаружен телефон из списка ATB: {phone_name}')
-                    break
-                try:
-                    data = get_file_list(SCREEN_FOLDER.as_posix(), adb_device)
-                    logger.info(f'Количество скринов: {len(data)}')
-                    logger.debug(str(data))
-                    if data:
-                        file, size = data[0][0], data[0][1]
-                        file_path = SCREEN_FOLDER / file
-                        if size > 0:
-                            logger.debug(f'Скачиваем файл {file} {size} кб')
-                            file_name = file.replace('.jpg', f'_from_{device_name}.jpg')
-                            target_path = TARGET_DIR / file_name
-                            downloaded = adb_device.sync.pull(file_path.as_posix(), target_path.as_posix())
-                            if downloaded:
-                                logger.debug(f'Удаляем файл {file}: {downloaded}')
-                                adb_device.shell(f'rm {file_path.as_posix()}')
+                    try:
+                        data = get_file_list(SCREEN_FOLDER.as_posix(), adb_device)
+                        logger.info(f'Количество скринов: {len(data)}')
+                        logger.debug(str(data))
+                        if data:
+                            file, size = data[0][0], data[0][1]
+                            file_path = SCREEN_FOLDER / file
+                            if size > 0:
+                                logger.debug(f'Скачиваем файл {file} {size} кб')
+                                file_name = file.replace('.jpg', f'_from_{device_name}.jpg')
+                                target_path = TARGET_DIR / file_name
+                                downloaded = adb_device.sync.pull(file_path.as_posix(), target_path.as_posix())
+                                if downloaded:
+                                    logger.debug(f'Удаляем файл {file}: {downloaded}')
+                                    adb_device.shell(f'rm {file_path.as_posix()}')
 
-                except Exception as err:
-                    logger.error(err, exc_info=False)
-        time.sleep(0.5)
+                    except Exception as err:
+                        logger.error(err, exc_info=False)
+            logger.info('\n')
+            time.sleep(0.5)
+        except Exception as err:
+            logger.error(err)
+            time.sleep(5)
 
 
 if __name__ == '__main__':
