@@ -72,7 +72,8 @@ def main():
             logger.info('\n')
             time.sleep(0.5)
         except Exception as err:
-            logger.error(err)
+            logger.info(err)
+            logger.error(err, exc_info=True)
             time.sleep(5)
 
 
