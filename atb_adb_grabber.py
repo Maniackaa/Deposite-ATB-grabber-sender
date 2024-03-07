@@ -42,18 +42,18 @@ def main():
         adb_devices = adb_client.device_list()
         PHONES = conf.adb.ATB_PHONES
         ATB_NAMES = conf.adb.ATB_NAMES
-        logger.info(f'Подключены устройства: {adb_devices}')
+        # logger.info(f'Подключены устройства: {adb_devices}')
         for adb_device in adb_devices:
             device_name = adb_device.info.get('serialno')
             # logger.info(f'Подключено: {device_name}')
             if device_name in PHONES:
                 for num, phone in enumerate(PHONES):
                     phone_name = ATB_NAMES[num]
-                    logger.debug(f'Обнаружен телефон из списка ATB: {phone_name}')
+                    logger.info(f'Обнаружен телефон из списка ATB: {phone_name}')
                     break
                 try:
                     data = get_file_list(SCREEN_FOLDER.as_posix(), adb_device)
-                    logger.debug(f'Количество скринов: {len(data)}')
+                    logger.info(f'Количество скринов: {len(data)}')
                     logger.debug(str(data))
                     if data:
                         file, size = data[0][0], data[0][1]
@@ -66,7 +66,7 @@ def main():
                             if downloaded:
                                 logger.debug(f'Удаляем файл {file}: {downloaded}')
                                 adb_device.shell(f'rm {file_path.as_posix()}')
-                    time.sleep(0.5)
+
                 except Exception as err:
                     logger.error(err, exc_info=False)
                     time.sleep(5)
