@@ -41,6 +41,8 @@ def main():
             files = list(path.glob('*.jpg'))
             if files:
                 logger.info(f'Обнаружены файлов для распознавания:\n{len(files)}')
+            else:
+                time.sleep(1)
             for file in files:
                 try:
                     start = time.perf_counter()
@@ -87,7 +89,7 @@ def main():
                     time.sleep(0.1)
 
             logger.info(f'Все файлы обработаны. Общее время: {time.perf_counter() - global_start}\n\n')
-            time.sleep(1)
+            time.sleep(0.5)
 
         except Exception as err:
             time.sleep(1)

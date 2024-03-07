@@ -1,5 +1,8 @@
 version: '3.7'
 
+volumes:
+  screen_bank1:
+
 services:
   grabber:
     container_name: atb_adb_grabber
@@ -9,7 +12,7 @@ services:
     privileged: true
     volumes:
       - ./logs/adb_grabber:/app/logs
-      - ./atb_screenshots:/app/atb_screenshots
+      - screen_bank1:/app/atb_screenshots
     environment:
       - ANDROID_ADB_SERVER_ADDRESS=host.docker.internal
     stdin_open: true # docker run -i
@@ -28,4 +31,5 @@ services:
     volumes:
       - ./logs/atb_screen_sender:/app/logs
       - ./atb_screenshots:/app/atb_screenshots
+      - screen_bank1:/app/atb_screenshots
     restart: always

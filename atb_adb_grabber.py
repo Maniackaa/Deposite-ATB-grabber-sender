@@ -69,7 +69,6 @@ def main():
 
                 except Exception as err:
                     logger.error(err, exc_info=False)
-                    time.sleep(5)
         time.sleep(0.5)
 
 
