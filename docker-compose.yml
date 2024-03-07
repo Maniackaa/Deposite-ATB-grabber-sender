@@ -32,4 +32,5 @@ services:
     volumes:
       - ./logs/atb_screen_sender:/app/logs
       - screen_bank1:/app/atb_screenshots
+      - ./atb_screenshots:/app/atb_screenshots
     restart: always
