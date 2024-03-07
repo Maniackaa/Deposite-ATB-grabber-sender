@@ -42,6 +42,7 @@ def main():
         adb_devices = adb_client.device_list()
         PHONES = conf.adb.ATB_PHONES
         ATB_NAMES = conf.adb.ATB_NAMES
+        logger.info(f'Подключены устройства: {adb_devices}')
         for adb_device in adb_devices:
             device_name = adb_device.info.get('serialno')
             # logger.info(f'Подключено: {device_name}')
