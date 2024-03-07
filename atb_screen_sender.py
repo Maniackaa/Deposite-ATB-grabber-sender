@@ -39,7 +39,7 @@ def main():
         try:
             global_start = time.perf_counter()
             files = list(path.glob('*.jpg'))
-            logger.debug(f'{files}')
+            logger.info(f'Обнаружены файлы для распознавания:\n{files}')
             for file in files:
                 try:
                     start = time.perf_counter()
@@ -82,9 +82,9 @@ def main():
                 except Exception as err:
                     logger.error(f'Ошибка обработки файла {file.name}: {err}')
                     err_log.error(err, exc_info=True)
-                    time.sleep(0.5)
+                    time.sleep(0.1)
 
-            logger.debug(f'Общее время: {time.perf_counter() - global_start}')
+            logger.info(f'Общее время: {time.perf_counter() - global_start}')
             logger.debug('----')
             time.sleep(0.5)
 

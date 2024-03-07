@@ -44,11 +44,11 @@ def main():
         ATB_NAMES = conf.adb.ATB_NAMES
         for adb_device in adb_devices:
             device_name = adb_device.info.get('serialno')
-            logger.info(f'Подключено: {device_name}')
+            # logger.info(f'Подключено: {device_name}')
             if device_name in PHONES:
                 for num, phone in enumerate(PHONES):
                     phone_name = ATB_NAMES[num]
-                    logger.info(f'Телефон из списка ATB: {phone_name}')
+                    logger.debug(f'Обнаружен телефон из списка ATB: {phone_name}')
                     break
                 try:
                     data = get_file_list(SCREEN_FOLDER.as_posix(), adb_device)
@@ -67,10 +67,12 @@ def main():
                                 adb_device.shell(f'rm {file_path.as_posix()}')
                     time.sleep(0.5)
                 except Exception as err:
-                    logger.debug(err, exc_info=True)
+                    logger.error(err, exc_info=False)
                     time.sleep(5)
             else:
-                time.sleep(5)
+                logger.info('Устройств из списка нет')
+                time.sleep(10)
+        time.sleep(0.5)
 
 
 if __name__ == '__main__':
