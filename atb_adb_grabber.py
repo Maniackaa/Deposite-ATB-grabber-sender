@@ -57,8 +57,10 @@ def main():
                         data = get_file_list(SCREEN_FOLDER.as_posix(), adb_device)
                         logger.info(f'Количество скринов: {len(data)}')
                         logger.debug(str(data))
-                        if data:
-                            file, size = data[0][0], data[0][1]
+                        # if data:
+                        for one_file in data:
+                            # file, size = data[0][0], data[0][1]
+                            file, size = one_file[0], one_file[1]
                             file_path = SCREEN_FOLDER / file
                             if size > 0:
                                 logger.debug(f'Скачиваем файл {file} {size} кб')
@@ -73,7 +75,7 @@ def main():
                         logger.error(err, exc_info=False)
             delta = round(time.perf_counter() - start, 2)
             logger.info(f'Время цикла: {delta}\ndelay{"*" * int(delta)}')
-            time.sleep(0.5)
+            time.sleep(3)
         except Exception as err:
             logger.info(err)
             logger.error(err, exc_info=True)
