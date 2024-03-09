@@ -47,7 +47,7 @@ LOGGING_CONFIG = {
     'loggers': {
         'bot_logger': {
             'handlers': ['stream_handler', 'rotating_file_handler'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': True
         },
         'errors_logger': {

@@ -1,28 +1,28 @@
 version: '3.7'
 
-volumes:
-  screen_bank1:
+#volumes:
+#  screen_bank1:
 
 services:
-  grabber:
-    container_name: atb_adb_grabber
-    build: .
-    env_file: .env
-    command: python3 atb_adb_grabber.py
-    privileged: true
-    volumes:
-      - ./logs/adb_grabber:/app/logs
-      - screen_bank1:/app/atb_screenshots
-      - ./atb_screenshots:/app/atb_screenshots
-    environment:
-      - ANDROID_ADB_SERVER_ADDRESS=host.docker.internal
-    stdin_open: true # docker run -i
-    tty: true        # docker run -t
-    ports:
-      - "5037:5037"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    restart: always
+#  grabber:
+#    container_name: atb_adb_grabber
+#    build: .
+#    env_file: .env
+#    command: python3 atb_adb_grabber.py
+#    privileged: true
+#    volumes:
+#      - ./logs/adb_grabber:/app/logs
+#      - screen_bank1:/app/atb_screenshots
+#      - ./atb_screenshots:/app/atb_screenshots
+#    environment:
+#      - ANDROID_ADB_SERVER_ADDRESS=host.docker.internal
+#    stdin_open: true # docker run -i
+#    tty: true        # docker run -t
+#    ports:
+#      - "5037:5037"
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
+#    restart: always
 
   sender:
     container_name: atb_screen_sender

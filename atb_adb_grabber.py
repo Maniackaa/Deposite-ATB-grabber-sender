@@ -34,19 +34,21 @@ def get_file_list(directory, adb_device):
 
 
 def main():
-
+    adb_client = AdbClient(host=os.getenv('HOST'), port=5037, socket_timeout=None)
     while True:
         try:
+            start = time.perf_counter()
             # adb_client = AdbClient(host="host.docker.internal", port=5037)
             # adb_client = AdbClient(host="127.0.0.1", port=5037)
-            adb_client = AdbClient(host=os.getenv('HOST'), port=5037)
+            adb_client = AdbClient(host=os.getenv('HOST'), port=5037, socket_timeout=1)
             adb_devices = adb_client.device_list()
             PHONES = conf.adb.ATB_PHONES
             ATB_NAMES = conf.adb.ATB_NAMES
-            # logger.info(f'Подключены устройства: {adb_devices}')
+            logger.info(f'Подключены устройства: {adb_devices}')
             for adb_device in adb_devices:
+                logger.debug(f'Проверяем устройство {adb_device}')
                 device_name = adb_device.info.get('serialno')
-                # logger.info(f'Подключено: {device_name}')
+                logger.debug(f'Прочитано имя: {device_name}')
                 if device_name in PHONES:
                     phone_num = PHONES.index(device_name)
                     phone_name = ATB_NAMES[phone_num]
@@ -69,7 +71,8 @@ def main():
 
                     except Exception as err:
                         logger.error(err, exc_info=False)
-            logger.info('\n')
+            delta = round(time.perf_counter() - start, 2)
+            logger.info(f'Время цикла: {delta}\ndelay{"*" * int(delta)}')
             time.sleep(0.5)
         except Exception as err:
             logger.info(err)
