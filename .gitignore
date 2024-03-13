@@ -6,6 +6,7 @@ credentials.json
 # C extensions
 *.so
 .idea
+atb_screenshots/
 
 # Distribution / packaging
 .Python
