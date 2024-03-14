@@ -55,7 +55,7 @@ def main():
                     elif size > 0:
                         logger.info(f'Отправляем {file.name, size, bool(size>0)}')
                         with open(file, "rb") as binary:
-                            screen = {'image': binary}
+                            screen = {'image': binary.read()}
                             response = requests.post(OCR_ENDPOINT, data={'name': file.name, 'worker': WORKER, 'oem': '1', 'psm': '7', 'lang': 'eng'}, files=screen, timeout=10)
                             pay = response.reason
                             logger.debug(f'{response.status_code} ({time.perf_counter() - start})')
@@ -70,7 +70,8 @@ def main():
                                                                          'worker': WORKER,
                                                                          'phone_name': get_phone_name(serial),
                                                                          'type': 'bank1',
-                                                                         }, timeout=10)
+                                                                         'name': file.name,
+                                                                         }, files=screen, timeout=10)
                             if response.status_code in [200, 201]:
                                 file.unlink()
                                 logger.info(f'Результат отправлен, Скрин удален')
